@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="nifi-fusion-processor" />
+        <module name="nifi-fusion-nar" />
+      </profile>
+      <profile name="Annotation profile for Unknown" enabled="true">
+        <sourceOutputDir name="../../../nifi-sample-processors/target/maven-archiver/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../../../nifi-sample-processors/target/maven-archiver/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="maven-archiver (2)" />
+      </profile>
+      <profile name="Annotation profile for maven-archiver (1)" enabled="true">
+        <sourceOutputDir name="../../../nifi-sample-nar/target/maven-archiver/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../../../nifi-sample-nar/target/maven-archiver/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="maven-archiver (1)" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="maven-archiver" target="1.5" />
+      <module name="maven-archiver (1)" target="1.5" />
+      <module name="maven-archiver (2)" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
