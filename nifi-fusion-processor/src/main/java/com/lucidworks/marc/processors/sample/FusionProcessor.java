@@ -87,10 +87,12 @@ public class FusionProcessor extends AbstractProcessor {
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final Relationship MY_RELATIONSHIP = new Relationship.Builder()
-            .name("MY_RELATIONSHIP")
-            .description("Example relationship")
+    public static final Relationship REL_SUCCESS = new Relationship.Builder()
+            .name("success")
+            .description("The original FlowFile")
             .build();
+
+
 
     private List<PropertyDescriptor> descriptors;
 
@@ -105,7 +107,7 @@ public class FusionProcessor extends AbstractProcessor {
         this.descriptors = Collections.unmodifiableList(descriptors);
 
         final Set<Relationship> relationships = new HashSet<Relationship>();
-        relationships.add(MY_RELATIONSHIP);
+        relationships.add(REL_SUCCESS);
         this.relationships = Collections.unmodifiableSet(relationships);
     }
 
@@ -155,6 +157,7 @@ public class FusionProcessor extends AbstractProcessor {
         } catch (Exception e) {
             System.out.println(e.getCause());
         }
+        session.transfer(flowFile, REL_SUCCESS);
 
     }
 }
