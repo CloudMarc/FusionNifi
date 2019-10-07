@@ -34,6 +34,7 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -55,6 +56,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.*;
 import org.apache.http.entity.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Tags({"fusion, pipeline, ingest, solr "})
 @CapabilityDescription("Fusion as a Consumer for indexing")
@@ -62,6 +65,7 @@ import org.apache.http.entity.*;
 @ReadsAttributes({@ReadsAttribute(attribute = "", description = "")})
 @WritesAttributes({@WritesAttribute(attribute = "", description = "")})
 public class FusionProcessor extends AbstractProcessor {
+    private static final Logger LOGGER = Logger.getLogger(FusionProcessor.class.getName());
 
     public static final PropertyDescriptor FUSION_URL_PROPERTY = new PropertyDescriptor
             .Builder().name("FUSION_URL_PROPERTY")
@@ -128,13 +132,16 @@ public class FusionProcessor extends AbstractProcessor {
 
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
+        LOGGER.info("FusionNifi onTrigger()...");
         FlowFile flowFile = session.get();
         if (flowFile == null) {
             return;
         }
-
+        final String fusionUrl = context.getProperty(FUSION_URL_PROPERTY).getValue();
+        final String fusionUsername = context.getProperty(FUSION_USER_PROPERTY).getValue();
+        final String fusionPasswd = context.getProperty(FUSION_PASSWD_PROPERTY).getValue();
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost("http://localhost:8764/api/index-pipelines/nifi_kafka_001/collections/nifi_kafka_001/index");
+        HttpPost post = new HttpPost(fusionUrl);
 
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         session.exportTo(flowFile, bytes);
@@ -146,8 +153,7 @@ public class FusionProcessor extends AbstractProcessor {
         );
 
         try {
-            //String encoding = Base64.getEncoder().encodeToString((username.concat(":").concat(password)).getBytes("UTF-8"));
-            String encoding = Base64.getEncoder().encodeToString(("admin:lucidworks1").getBytes("UTF-8"));
+            String encoding = Base64.getEncoder().encodeToString((fusionUsername.concat(":").concat(fusionPasswd)).getBytes(StandardCharsets.UTF_8));
 
             post.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
             post.setHeader(HttpHeaders.ACCEPT, "application/json");
