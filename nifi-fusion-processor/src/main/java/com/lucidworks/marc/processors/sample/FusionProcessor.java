@@ -86,7 +86,8 @@ public class FusionProcessor extends AbstractProcessor {
     public static final PropertyDescriptor FUSION_PASSWD_PROPERTY = new PropertyDescriptor
             .Builder().name("FUSION_PASSWD_PROPERTY")
             .displayName("Fusion Password")
-            .description("Fusion Password for basic auth")
+            .description("Fusion Password for basic authentication")
+            .sensitive(true)
             .required(true)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
