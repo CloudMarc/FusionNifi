@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lucidworks.marc.processors.fusion;
+package com.lucidworks.FusionNifi;
 
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
@@ -45,18 +45,14 @@ import java.util.Base64;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.HttpHeaders;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.HttpResponse;
 
 import java.io.ByteArrayOutputStream;
 
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.ContentType;
-import org.apache.http.*;
-import org.apache.http.entity.*;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
 
 @Tags({"fusion, pipeline, ingest, solr "})
@@ -78,7 +74,7 @@ public class FusionProcessor extends AbstractProcessor {
     public static final PropertyDescriptor FUSION_USER_PROPERTY = new PropertyDescriptor
             .Builder().name("FUSION_USER_PROPERTY")
             .displayName("Fusion Username")
-            .description("Fusion Username for basic auth")
+            .description("Fusion Username for basic authentication")
             .required(true)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
@@ -97,6 +93,10 @@ public class FusionProcessor extends AbstractProcessor {
             .description("The original FlowFile")
             .build();
 
+    public static final Relationship REL_FAILURE = new Relationship.Builder()
+            .name("failure")
+            .description("Something went wrong")
+            .build();
 
 
     private List<PropertyDescriptor> descriptors;
@@ -113,6 +113,7 @@ public class FusionProcessor extends AbstractProcessor {
 
         final Set<Relationship> relationships = new HashSet<Relationship>();
         relationships.add(REL_SUCCESS);
+        relationships.add(REL_FAILURE);
         this.relationships = Collections.unmodifiableSet(relationships);
     }
 
@@ -163,6 +164,7 @@ public class FusionProcessor extends AbstractProcessor {
             HttpResponse response = client.execute(post);
         } catch (Exception e) {
             System.out.println(e.getCause());
+            session.transfer(flowFile, REL_FAILURE);
         }
         session.transfer(flowFile, REL_SUCCESS);
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lucidworks.marc.processors.fusion;
+package com.lucidworks.FusionNifi;
 
 import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
@@ -35,7 +35,7 @@ public class FusionProcessorTest {
 
     @Before
     public void init() {
-        testRunner = TestRunners.newTestRunner(com.lucidworks.marc.processors.fusion.FusionProcessor.class);
+        testRunner = TestRunners.newTestRunner(FusionProcessor.class);
     }
 
     @Test
@@ -48,10 +48,10 @@ public class FusionProcessorTest {
         InputStream content = new ByteArrayInputStream("{\"hello\":\"nifi rocks\"}".getBytes());
 
         // Generate a test runner to mock a processor in a flow
-        TestRunner runner = TestRunners.newTestRunner(new com.lucidworks.marc.processors.fusion.FusionProcessor());
+        TestRunner runner = TestRunners.newTestRunner(new FusionProcessor());
 
         // Add properites
-        runner.setProperty(com.lucidworks.marc.processors.fusion.FusionProcessor.FUSION_URL_PROPERTY, "http://localhost/");
+        runner.setProperty(FusionProcessor.FUSION_URL_PROPERTY, "http://localhost/");
 
         // Add the content to the runner
         runner.enqueue(content);
@@ -62,7 +62,7 @@ public class FusionProcessorTest {
         // All results were processed with out failure
         runner.assertQueueEmpty();
         // If you need to read or do aditional tests on results you can access the content
-        List<MockFlowFile> results = runner.getFlowFilesForRelationship(com.lucidworks.marc.processors.fusion.FusionProcessor.REL_SUCCESS);
+        List<MockFlowFile> results = runner.getFlowFilesForRelationship(FusionProcessor.REL_SUCCESS);
         Assert.assertEquals("1 match", results.size() == 1);
         MockFlowFile result = results.get(0);
 

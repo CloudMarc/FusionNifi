@@ -26,7 +26,7 @@
         <version>1.9.2</version>
     </parent>
 
-    <groupId>com.lucidworks.marc</groupId>
+    <groupId>com.lucidworks</groupId>
     <artifactId>FusionNifi</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>

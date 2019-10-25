@@ -17,7 +17,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.lucidworks.marc</groupId>
+        <groupId>com.lucidworks</groupId>
         <artifactId>FusionNifi</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -32,7 +32,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.lucidworks.marc</groupId>
+            <groupId>com.lucidworks</groupId>
             <artifactId>nifi-fusion-processor</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
